@@ -1,0 +1,2 @@
+python("import os;os.environ['PROD_SERVER'] = 'P:/badgers_and_foxes'");
+python("execfile('C:/Users/amol/PycharmProjects/mayatools/utils/playblast.py');mp_playblast('test', 1280, 720)");
