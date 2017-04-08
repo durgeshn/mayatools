@@ -51,3 +51,5 @@ def addFk(chain):
             cmds.delete(cmds.parentConstraint(chain[i], fkxGrp))
             cmds.parent(fkxGrp, controller[i - 1])
             cmds.parentConstraint(fkxGrp, chain[i])
+
+
