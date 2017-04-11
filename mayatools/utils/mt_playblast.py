@@ -1,20 +1,20 @@
 import pymel.core as pm
 import maya.mel as mel
+import tempfile
 
 
 def mp_playblast(fileName, width, height, startTime=None, endTime=None):
     """
-    playblast using custom setting.
+    pcg_playblast using custom setting.
     :param fileName: string (file path)
     :param width: int
     :param height: int
     :param startTime: float
     :param endTime: float
-    :return: playblast
+    :return: pcg_playblast
     """
     cam = pm.ls('*:cameraHD', typ='transform')[0]
     # noinspection PyTypeChecker
-    # convertPrspCamToShotCam(cam, 'persp')
     aPlayBackSlider = mel.eval('$tmpVar=$gPlayBackSlider')
     soundFile = pm.windows.timeControl(aPlayBackSlider, q=True, s=True)
     if startTime and endTime:
@@ -59,10 +59,18 @@ def convertPrspCamToShotCam(cam, prspCam):
 
 
 def getSoundFilePath():
+    """
+    get sound file path and export it in your temp directory.
+    :param: rawFileName: string (fileNameForExportTxtAsSameNaming)
+    :return: soundFileTextPath
+    """
     audio = pm.ls(type='audio')[0]
     path = audio.filename.get()
     if path:
-        print path
-        return path
+        tempDir = tempfile.gettempdir()
+        soundFileTextPath = tempDir + '/raw_soundFilePathInText.txt'
+        with open(soundFileTextPath, 'w') as fi:
+            fi.write(path)
+        return soundFileTextPath
     else:
         return False

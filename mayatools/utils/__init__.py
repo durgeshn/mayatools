@@ -1,2 +1,2 @@
-import playblast
+import mt_playblast
 import contoller

@@ -4,7 +4,7 @@ Create Fk On Chain.
 import maya.cmds as cmds
 import sys
 
-sys.path.append(r'C:\Users\amol\PycharmProjects')
+# sys.path.append(r'C:\Users\amol\PycharmProjects')
 
 from mayatools import utils
 
@@ -65,9 +65,9 @@ for x in range(len(branches)):
         if i != 0:
             print cnt.O, parentController[i - 1]
             cmds.parent(cnt.O, parentController[i - 1])
-else:
-    pass
-cmds.refresh()  # Parent all FK Offset group to upper contoller.
+        else:
+            pass
+        cmds.refresh()  # Parent all FK Offset group to upper contoller.
 for z in range(len(branches)):
     parentJoint = cmds.listRelatives(branches[z], p=True, typ='joint')
     cmds.parent(branches[z] + '_ctl_grp', parentJoint[0] + '_ctl')

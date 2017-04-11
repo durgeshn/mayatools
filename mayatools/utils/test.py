@@ -1,5 +1,4 @@
 from maya import cmds as cmds
-import os
 
 
 def fkchain(sel='joint1'):
@@ -17,11 +16,8 @@ def fkchain(sel='joint1'):
                 multiChild = cmds.listRelatives(parent, c=True, typ='joint')
         else:
             break
-        if os.path.isfile(r"d:\temp\breakWhile.txt"):
-            break
     addFk(newChain)
     for each in multiChild:
-        print each
         fkchain(sel=each)
         # return newChain, multiChild
 
@@ -51,5 +47,3 @@ def addFk(chain):
             cmds.delete(cmds.parentConstraint(chain[i], fkxGrp))
             cmds.parent(fkxGrp, controller[i - 1])
             cmds.parentConstraint(fkxGrp, chain[i])
-
-
