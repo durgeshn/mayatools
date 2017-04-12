@@ -36,7 +36,7 @@ def batPlayblast(cam, mayaFilePath, startFrame, endFrame, xRes=1280, yRes=720, i
         endFrame,
         preCmd
     )
-    # os.environ['MAYA_SCRIPT_PATH'] = os.path.dirname(__file__)
+    os.environ['MAYA_SCRIPT_PATH'] = os.path.dirname(__file__)
     os.environ['PYTHONPATH'] = os.path.dirname(__file__)
     os.environ['PROD_SERVER'] = 'P:/badgers_and_foxes'
     process = Popen(render_cmd, stdout=PIPE)
@@ -45,10 +45,13 @@ def batPlayblast(cam, mayaFilePath, startFrame, endFrame, xRes=1280, yRes=720, i
     print (stderr)
     tempdir = tempfile.gettempdir()
     soundFileTextPath = tempdir + '/raw_soundFilePathInText.txt'
-    with open(soundFileTextPath, 'r') as fi:
-        soundFilePath = fi.readline()
-    os.remove(soundFileTextPath)
-    return renderDirPath, soundFilePath
+    if os.path.isfile(soundFileTextPath):
+        with open(soundFileTextPath, 'r') as fi:
+            soundFilePath = fi.readline()
+        os.remove(soundFileTextPath)
+        return renderDirPath, soundFilePath
+    else:
+        return renderDirPath
 
 
 def getSoundFilePath():
@@ -58,12 +61,15 @@ def getSoundFilePath():
     :return: soundFileTextPath
     """
     audio = pm.ls(type='audio')[0]
-    path = audio.filename.get()
-    if path:
-        tempDir = tempfile.gettempdir()
-        soundFileTextPath = tempDir + '/raw_soundFilePathInText.txt'
-        with open(soundFileTextPath, 'w') as fi:
-            fi.write(path)
-        return soundFileTextPath
+    if audio:
+        path = audio.filename.get()
+        if path:
+            tempDir = tempfile.gettempdir()
+            soundFileTextPath = tempDir + '/raw_soundFilePathInText.txt'
+            with open(soundFileTextPath, 'w') as fi:
+                fi.write(path)
+            return soundFileTextPath
+        else:
+            return False
     else:
-        return False
+        pass
