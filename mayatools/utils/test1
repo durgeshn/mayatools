@@ -74,3 +74,8 @@ for z in range(len(branches)):
     cmds.refresh()
 cmds.select(cl=True)
 
+
+# git changes added
+def addition(val1, val2):
+    sum = val1 + val2
+    return sum
