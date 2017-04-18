@@ -1,3 +1,14 @@
-a = '$PROD_SERVER/01_SAISON_1/13_PRODUCTION/03_ASSETS/03_3D/ch/ch_rosie/rig/ch_rosie_rig.ma'
+class Actor(object):
+    def __init__(self, name, health=100, strength=100):
+        self.name = name
+        self.health = health
+        self.strength = strength
 
-print a.find('cam')
+
+class Warrior(Actor):
+    def __init__(self, name):
+        super(Warrior, self).__init__(name)
+
+
+a = Warrior('Amol')
+print a.health

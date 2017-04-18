@@ -1,14 +1,17 @@
 import os
 from ConfigParser import SafeConfigParser
 
-mayaFilePath = r"D:\temp\BDG105_004_lay.ma"
+# mayaFilePath = r"D:\temp\BDG105_004_lay.ma"
 configFilePath = os.path.dirname(__file__) + '/setting.config'
 
 
 class getSceneDetails(object):
-    def __init__(self, mayaFilePath, configFilePath):
+    def __init__(self, mayaFilePath, configFilePath, nameFilter=list()):
+        if not nameFilter:
+            nameFilter = ['cam', 'Cam', 'CAM']
         self.mayaFilePath = mayaFilePath
         self.configFilePath = configFilePath
+        self.nameFilter = nameFilter
 
     @property
     def getParser(self):
@@ -16,7 +19,7 @@ class getSceneDetails(object):
         parser.read(self.configFilePath)
         return parser
 
-    def getReferences(self, nameFilter=['cam', 'Cam', 'CAM']):
+    def getReferences(self):
         allReferences = []
         camReferences = []
         with open(self.mayaFilePath, 'r') as fi:
@@ -24,7 +27,7 @@ class getSceneDetails(object):
                 if line.startswith('file -rdi'):
                     allReferences.append(line.split(' ')[-1].replace('"', '').replace(';', '').strip())
         for each in allReferences:
-            for filt in nameFilter:
+            for filt in self.nameFilter:
                 if each.find(filt) != -1:
                     camReferences.append(each)
         return camReferences
@@ -64,10 +67,3 @@ class getSceneDetails(object):
 
     def getResolution(self):
         print self.getParser.options('resolution')
-
-
-a = getSceneDetails(mayaFilePath, configFilePath)
-# print a.getFrameRange()
-# print a.get_cams()
-# print a.getResolution()
-print a.get_cams()
