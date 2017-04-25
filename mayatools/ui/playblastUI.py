@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:\Users\amol\PycharmProjects\mayatools\ui\playblastUI.ui'
 #
-# Created: Wed Apr 19 14:20:16 2017
+# Created: Tue Apr 25 15:59:01 2017
 #      by: pyside-uic 0.2.14 running on PySide 1.2.0
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,7 +12,7 @@ from PySide import QtCore, QtGui
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(500, 471)
+        MainWindow.resize(475, 473)
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_4 = QtGui.QGridLayout(self.centralwidget)
@@ -141,9 +141,13 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.addWidget(self.cancel_BTN)
         self.verticalLayout_3.addLayout(self.horizontalLayout_3)
         self.gridLayout_4.addLayout(self.verticalLayout_3, 0, 0, 1, 1)
+        self.playblast_PB = QtGui.QProgressBar(self.centralwidget)
+        self.playblast_PB.setProperty("value", 24)
+        self.playblast_PB.setObjectName("playblast_PB")
+        self.gridLayout_4.addWidget(self.playblast_PB, 1, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 500, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 475, 21))
         self.menubar.setObjectName("menubar")
         self.menuPreference = QtGui.QMenu(self.menubar)
         self.menuPreference.setObjectName("menuPreference")

@@ -1,4 +1,3 @@
-import os
 from ConfigParser import SafeConfigParser
 
 

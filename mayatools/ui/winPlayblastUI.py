@@ -11,7 +11,7 @@ reload(playblastUI)
 reload(mayaSceneParser)
 
 # files.
-mayaFilePath = r"D:\temp\BDG105_004_layNew.ma"
+mayaFilePath = r"D:\temp\BDG105_004_lay.ma"
 # configFilePath = os.path.dirname(__file__) + '/setting.config'
 configFilePath = r"C:\Users\amol\PycharmProjects\mayatools\batch\pcg_playblast\setting.config"
 # styles.
@@ -30,6 +30,7 @@ class PlayblastUIConn(QtGui.QMainWindow, playblastUI.Ui_MainWindow):
         self.configFilePath = config_file_path
         self.setupUi(self)
         self.setStyleSheet(QTDark)
+        self.playblast_PB.setVisible(False)
         self.fill_ui()
         self.connections()
 
@@ -67,6 +68,7 @@ class PlayblastUIConn(QtGui.QMainWindow, playblastUI.Ui_MainWindow):
         # query camera and resolution is selected or not.
         if not selected_resolution or not selected_cam:
             return False
+        self.playblast_PB.setVisible(True)
         # query start frame and end frame.
         start_frame = self.startFrame_DSB.value()
         end_frame = self.endFrame_DSB.value()
@@ -79,6 +81,7 @@ class PlayblastUIConn(QtGui.QMainWindow, playblastUI.Ui_MainWindow):
         resolution = parser.get('resolution', selected_resolution)
         res = resolution.split(',')
         playblast_bat.batPlayblast(selected_cam, self.mayaFilePath, start_frame, end_frame, xRes=res[0], yRes=res[1])
+        self.playblast_PB.setVisible(False)
 
     def resOnOff(self):
         self.custResX_SB.setEnabled(self.custom_res_CB.checkState())
