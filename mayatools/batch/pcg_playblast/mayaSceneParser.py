@@ -1,11 +1,8 @@
 import os
 from ConfigParser import SafeConfigParser
 
-# mayaFilePath = r"D:\temp\BDG105_004_lay.ma"
-configFilePath = os.path.dirname(__file__) + '/setting.config'
 
-
-class getSceneDetails(object):
+class GetSceneDetails(object):
     def __init__(self, mayaFilePath, configFilePath, nameFilter=list()):
         if not nameFilter:
             nameFilter = ['cam', 'Cam', 'CAM']
@@ -66,4 +63,4 @@ class getSceneDetails(object):
         return startFrame, endFrame
 
     def getResolution(self):
-        print self.getParser.options('resolution')
+        return self.getParser.options('resolution')

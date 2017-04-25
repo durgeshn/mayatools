@@ -4,14 +4,16 @@ import maya.mel as mel
 
 class LipSetup(object):
     def __init__(self, face_geo, namespaceName='XXX'):
+        self.face_geo = pm.PyNode(face_geo)
+        self.namespaceName = namespaceName
         self.lipCtrlGrps = ['upperLip3Attach_L', 'upperLip3Attach_R', 'lowerLip3Attach_L', 'lowerLip3Attach_R',
                             'upperLip5Attach_R', 'lowerLip5Attach_R', 'upperLip5Attach_L', 'lowerLip5Attach_L',
                             'Lip6Attach_L', 'Lip6Attach_R', 'lowerLip0Attach_M', 'upperLip0Attach_M']
         self.deleteObjArray = ['rig_group', 'FaceGroup', 'Head_M', 'Main', 'faceLid', 'Jaw_M', 'FaceUpperRegion_M',
                                'FaceLowerRegion_M']
+        self.controllers = ['upperLip3_L', 'upperLip3_R', 'lowerLip3_L', 'lowerLip3_R', 'Lip6_L', 'Lip6_R',
+                            'lowerLip0_M', 'upperLip0_M', 'FKLips_M']
         self.lip_geos = ['LipRegion', 'LipsRegion']
-        self.face_geo = pm.PyNode(face_geo)
-        self.namespaceName = namespaceName
 
     def exportLipSetup(self):
         # create groups.
@@ -84,10 +86,6 @@ class LipSetup(object):
         else:
             pm.warning('geometry have more than one blenshapes found...')
 
-        # create constraints.
-        # pm.orientConstraint('Head_M', 'Brs', mo=True)
-        # pm.orientConstraint('Head_M', 'FaceMotionFollowHead', mo=True)
-
     def _hierarchyChecker(self):
         groups = ['FaceGroup', 'FaceMotionSystem', 'FaceDeformationSystem', 'FaceMotionFollowHead', 'ControlsSetup',
                   'RegionDeformations']
@@ -98,6 +96,7 @@ class LipSetup(object):
                 existed.append(each)
             else:
                 notExisted.append(each)
+
         if not notExisted:
             if len(existed) == len(groups):
                 # parent all objects in groups.
@@ -108,18 +107,33 @@ class LipSetup(object):
                 pm.parent(self.namespaceName + ':faceHeadJoint', 'FaceDeformationSystem')
                 pm.delete(self.namespaceName + ':FaceGroup')
                 self._removeNamespace()
-                return True
+                pm.orientConstraint('Head_M', 'Brs', mo=True)
+                ret = True
             else:
                 pm.warning('default hierarchy is exist but not proper, please undo step and match hierarchy...'),
-                return False
+                ret = False
         else:
             if len(notExisted) == len(groups):
                 pm.parent(self.namespaceName + ':FaceGroup', 'Rig')
                 self._removeNamespace()
-                return True
+                pm.orientConstraint('Head_M', 'Brs', mo=True)
+                pm.orientConstraint('Head_M', 'FaceMotionFollowHead', mo=True)
+                ret = True
             else:
                 pm.warning('default hierarchy is exist but not proper, please undo step and match hierarchy...'),
-                return False
+                ret = False
+        if ret:
+            if pm.objExists('Main'):
+                pm.connectAttr('Main.s', 'Brs.s', f=True)
+            else:
+                pm.connectAttr('Main_CTRL.s', 'Brs.s', f=True)
+            for each in self.controllers:
+                pm.rename(each, each + '_CTRL')
+            pm.setAttr('FaceDeformationSystem.v', 0)
+            pm.setAttr('FaceDeformationSystem.v', l=True)
+            return True
+        else:
+            return False
 
     def _removeNamespace(self):
         allNameSpaces = pm.listNamespaces()
